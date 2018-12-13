@@ -215,7 +215,7 @@ outdated(config)
 make(plan, jobs = 2)
 ```
 
-## Distributed computing with persistent workers
+## Distributed computing: persistent workers
 
 ```{r slurmclustermq, eval = FALSE}
 drake_hpc_template_file("slurm_clustermq.tmpl") # Modify by hand.
@@ -226,11 +226,11 @@ options(
 make(plan, jobs = 2, parallelism = "clustermq")
 ```
 
-## Distributed computing with persistent workers
+## Distributed computing: persistent workers
 
 <script src="https://fast.wistia.com/embed/medias/ycczhxwkjw.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_responsive_padding" style="padding:56.21% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_ycczhxwkjw videoFoam=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/ycczhxwkjw/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>
 
-## Distributed computing with transient workers
+## Distributed computing: transient workers
 
 ```{r slurmfuture, eval = FALSE}
 library(future.batchtools)
@@ -239,7 +239,7 @@ future::plan(batchtools_slurm, template = "slurm_batchtools.tmpl")
 make(plan, jobs = 2, parallelism = "future")
 ```
 
-## Distributed computing with transient workers
+## Distributed computing: transient workers
 
 <script src="https://fast.wistia.com/embed/medias/340yvlp515.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_responsive_padding" style="padding:56.21% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_340yvlp515 videoFoam=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/340yvlp515/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" onload="this.parentNode.style.opacity=1;" /></div></div></div></div><br>
 
