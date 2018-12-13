@@ -1,0 +1,11 @@
+library(drake)
+library(dplyr)
+library(gapminder)
+library(ggplot2)
+library(gridExtra)
+library(rlang)
+library(rmarkdown)
+library(rstanarm)
+library(tibble)
+
+pkgconfig::set_config("drake::strings_in_dots" = "literals")
