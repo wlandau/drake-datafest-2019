@@ -212,7 +212,8 @@ outdated(config)
 ## Run your targets in parallel.
 
 ```{r localparallel, eval = FALSE}
-make(plan, jobs = 2)
+future::plan(future::multiprocess)
+make(plan, jobs = 2, parallelism = "future")
 ```
 
 ## Distributed computing: persistent workers

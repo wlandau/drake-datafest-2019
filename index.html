@@ -2051,7 +2051,8 @@ document.getElementsByTagName('head')[0].appendChild(style);
 </section>
 <section id="run-your-targets-in-parallel." class="slide level2">
 <h2>Run your targets in parallel.</h2>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">make</span>(plan, <span class="dt">jobs =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">future<span class="op">::</span><span class="kw">plan</span>(future<span class="op">::</span>multiprocess)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">make</span>(plan, <span class="dt">jobs =</span> <span class="dv">2</span>, <span class="dt">parallelism =</span> <span class="st">&quot;future&quot;</span>)</a></code></pre></div>
 </section>
 <section id="distributed-computing-persistent-workers" class="slide level2">
 <h2>Distributed computing: persistent workers</h2>
