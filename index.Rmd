@@ -54,13 +54,6 @@ options(warnPartialMatchArgs = FALSE)
 
 <div style="font-size: 0.5em;"><a href="https://openclipart.org/detail/275842/sisyphus-overcoming-silhouette">https://openclipart.org/detail/275842/sisyphus-overcoming-silhouette</a></div>
 
-## Example: GDP per capita
-
-- Which quantity is a better predictor of GDP per capita, life expectancy or population?
-  - [Gapminder data](https://www.gapminder.org/data/): observations on multiple countries from 1952 to 2007.
-  - Bayesian regeression with [`rstanarm`](https://github.com/stan-dev/rstanarm): straightforward inference and interpretation.
-- But Bayesian methods can be <span style = "color: red">**computationally expensive**</span>!
-
 ## Pipeline toolkits for large computation
 
 - Lots of tools: [github.com/pditommaso/awesome-pipeline](https://github.com/pditommaso/awesome-pipeline).
@@ -68,7 +61,14 @@ options(warnPartialMatchArgs = FALSE)
 
 <img src = "./images/pipelines.png" style="border: none; box-shadow: none; height: 400px">
 
-## GDP analysis pipeline with `drake`
+## Small example `drake` project: GDP
+
+- Which quantity is a better predictor of GDP per capita, life expectancy or population?
+  - [Gapminder data](https://www.gapminder.org/data/): observations on multiple countries from 1952 to 2007.
+  - Bayesian regeression with [`rstanarm`](https://github.com/stan-dev/rstanarm): straightforward inference and interpretation.
+- But Bayesian methods can be <span style = "color: red">**computationally expensive**</span>!
+
+## GDP analysis pipeline
 
 <img src = "./images/graph1.png" style="border: none; box-shadow: none;">
 
@@ -140,7 +140,7 @@ loadd(plots)
 plot(plots)
 ```
 
-```{r forget}
+```{r forget, echo = FALSE}
 rm(plots)
 ```
 
@@ -178,7 +178,7 @@ vis_drake_graph(config, targets_only = TRUE)
 make(plan)
 ```
 
-## Life expectancy wins!
+## Life expectancy has the stronger association.
 
 ```{r good-plots, fig.width = 8, fig.height = 4}
 loadd(plots)
@@ -191,15 +191,17 @@ rm(plots)
 
 ## Reproducibilty is about confidence and trust.
 
+<br>
+
+- **Tangible evidence** that your results match the code and data at hand:
+
 ```{r make-done}
 make(plan)
 
 outdated(config)
 ```
 
-- `drake` gives you **tangible evidence** that your results match the code and data you have right now!
-
-## Generate large plans
+## Scale up to many targets.
 
 - `map_plan()`
 - `reduce_plan()`
@@ -209,34 +211,87 @@ outdated(config)
 - `evaluate_plan()`
 - `expand_plan()`
 
-## Run your targets in parallel.
+## Scale up to many targets.
 
-```{r localparallel, eval = FALSE}
-future::plan(future::multiprocess)
-make(plan, jobs = 2, parallelism = "future")
+```{r largeplan}
+# Multiple datasets.
+data_plan <- drake_plan(data = get_data("dataset")) %>%
+  evaluate_plan(list(dataset = c("oecd", "unesco", "world_bank")))
+
+# Combinations to analyze.
+combos <- expand.grid(
+  dataset = c("data_oecd", "data_unesco", "data_world_bank"),
+  covariate = c("log_pop", "life_exp", "literacy"),
+  priors = c("normal", "t", "dirichlet_process"),
+  stringsAsFactors = FALSE
+) %>%
+  mutate(
+    id = apply(., 1, paste, collapse = "_"),
+    dataset = rlang::syms(dataset)
+  )
 ```
 
-## Distributed computing: persistent workers
+## Scale up to many targets.
+
+```{r largeplan2}
+# Plan to analyze each combo.
+analysis_plan <- map_plan(combos, fit_large_model, trace = TRUE) %>%
+  
+  # Summarize models by covariate.
+  gather_by(prefix = "results", gather = "summarize_models", covariate)
+
+# Combine plans.
+plan <- bind_plans(data_plan, analysis_plan) %>%
+  select(target, command)
+```
+
+## Scale up to many targets.
+
+```{r largeplan3}
+plan
+```
+
+## Scale up to many targets.
+
+<img src = "./images/largegraph.png" style="border: none; box-shadow: none; height: 550px;">
+
+## Scale up to many targets.
+
+<img src = "./images/zoomgraph.png" style="border: none; box-shadow: none; height: 550px;">
+
+## Persistent parallel workers
 
 ```{r slurmclustermq, eval = FALSE}
+# If running locally:
+options(clustermq.scheduler = "multicore")
+
+# If on a SLURM cluster (other clusters also supported):
 drake_hpc_template_file("slurm_clustermq.tmpl") # Modify by hand.
 options(
   clustermq.scheduler = "slurm",
   clustermq.template = "slurm_clustermq.tmpl"
 )
+
+# Either way, make() is the same.
 make(plan, jobs = 2, parallelism = "clustermq")
 ```
 
-## Distributed computing: persistent workers
+## Persistent parallel workers
 
 <script src="https://fast.wistia.com/embed/medias/ycczhxwkjw.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_responsive_padding" style="padding:56.21% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_ycczhxwkjw videoFoam=true" style="height:100%;position:relative;width:100%"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/ycczhxwkjw/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" onload="this.parentNode.style.opacity=1;" /></div></div></div></div>
 
-## Distributed computing: transient workers
+## Transient parallel workers
 
 ```{r slurmfuture, eval = FALSE}
+# If running locally:
+future::plan(future::multisession)
+
+# If on a SLURM cluster (other clusters also supported):
 library(future.batchtools)
 drake_hpc_template_file("slurm_batchtools.tmpl") # Modify by hand.
 future::plan(batchtools_slurm, template = "slurm_batchtools.tmpl")
+
+# Either way, make() is the same.
 make(plan, jobs = 2, parallelism = "future")
 ```
 

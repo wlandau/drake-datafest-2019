@@ -42,8 +42,7 @@ plot_model <- function(fit) {
       aes_string(slope = covariate, intercept = "intercept"),
       samples,
       color = "skyblue",
-      size = 0.2,
-      alpha = 0.25
+      size = 0.2
     ) +
     geom_abline(intercept = coef(fit)[1], slope = coef(fit)[2]) +
     theme_gray(20)
