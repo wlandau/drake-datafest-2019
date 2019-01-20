@@ -178,7 +178,7 @@ vis_drake_graph(config, targets_only = TRUE)
 make(plan)
 ```
 
-## Life expectancy has the stronger association.
+## Life expectancy has a stronger association.
 
 ```{r good-plots, fig.width = 8, fig.height = 4}
 loadd(plots)
@@ -344,7 +344,7 @@ drake_example("gsp")
 <li><a href = "https://github.com/mrchypark">Chan-Yub Park</a></li>
 <li><a href = "https://github.com/tiernanmartin">Tiernan Martin</a></li>
 </ul>
- 
+
 ## References
 
 - [`drake`](https://github.com/ropensci/drake)
