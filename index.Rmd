@@ -201,52 +201,63 @@ make(plan)
 outdated(config)
 ```
 
-## Scale up to many targets.
+## Scale up to many targets
 
-- `map_plan()`
-- `reduce_plan()`
-- `reduce_by()`
-- `gather_plan()`
-- `gather_by()`
-- `evaluate_plan()`
-- `expand_plan()`
-
-## Experimental interface
+- Predict gross state product using an econometrics dataset.
 
 ```{r largeplan}
+library(Ecdat)
+
+# We want to predict "gsp" based on the other variables.
+predictors <- setdiff(colnames(Produc), "gsp")
+
+# We will try all combinations of three covariates.
+combos <- combn(predictors, 3)
+
+# We have a grid of covariates.
+x1 <- rlang::syms(combos[1, ])
+x2 <- rlang::syms(combos[2, ])
+x3 <- rlang::syms(combos[3, ])
+```
+
+## Scale up to many targets
+
+- Experimental interface coming to `drake` >= 7.0.0.
+
+```{r gspfun, echo = FALSE}
+fit_gsp_model <- function(...) {}
+```
+
+```{r largeplan2}
 plan <- drake_plan(
-  data = target(
-    get_data("data_name"),
-    transform = cross(data_name = c(oecd, unesco, world_bank))
+  model = target(
+    fit_gsp_model(gsp ~ x1 + x2 + x3, data = Ecdat::Produc),
+    transform = map(x1 = !!x1, x2 = !!x2, x3 = !!x3)
   ),
-  analysis = target(
-    fit_large_model(data, "covariate", "priors"),
-    transform = cross(
-      data,
-      covariate = c(log_pop, life_exp, literacy),
-      priors = c(normal, t, dirichlet_process)
-    )
+  rmspe_i = target(
+    get_rmspe(model, Ecdat::Produc),
+    transform = map(model)
   ),
-  winner = target(
-    get_winner(analysis),
-    transform = summarize(data, priors)
-  )
+  rmspe = target(
+    do.call(rbind, rmspe_i),
+    transform = reduce()
+  ),
+  plot = ggsave(file_out("rmspe.pdf"), plot_rmspe(rmspe))
 )
 ```
 
 ## Scale up to many targets.
 
-```{r largeplan3}
+```{r largeplan3, echo = FALSE}
 plan
 ```
 
 ## Scale up to many targets.
 
-<img src = "./images/largegraph.png" style="border: none; box-shadow: none; height: 550px;">
-
-## Scale up to many targets.
-
-<img src = "./images/zoomgraph.png" style="border: none; box-shadow: none; height: 550px;">
+```{r largeplan4, echo = FALSE}
+config <- drake_config(plan)
+vis_drake_graph(config)
+```
 
 ## Persistent parallel workers
 
