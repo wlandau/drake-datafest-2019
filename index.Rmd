@@ -304,11 +304,12 @@ make(plan, jobs = 2, parallelism = "future")
 ```{r install, eval = FALSE}
 install.packages("drake") # CRAN release
 
-library(devtools)
+library(remotes)
 install_github("ropensci/drake") # Development version
 
 library(drake)
 drake_example("gapminder") # Download today's code.
+drake_example("gsp")
 ```
 
 - [These slides](https://wlandau.github.io/drake-datafest-2019) ([source](https://github.com/wlandau/drake-datafest-2019))
@@ -343,12 +344,13 @@ drake_example("gapminder") # Download today's code.
 <li><a href = "https://github.com/mrchypark">Chan-Yub Park</a></li>
 <li><a href = "https://github.com/tiernanmartin">Tiernan Martin</a></li>
 </ul>
-
+ 
 ## References
 
 - [`drake`](https://github.com/ropensci/drake)
 - [rOpenSci](https://ropensci.org)
 - [Gapminder](https://www.gapminder.org) and the [`gapminder` package](https://github.com/jennybc/gapminder)
+- [`Produc`](https://rdrr.io/rforge/Ecdat/man/Produc.html) dataset dataset from the [`Ecdat` package](https://cran.r-project.org/web/packages/Ecdat/index.html)
 - [List of pipeline toolkits](https://github.com/pditommaso/awesome-pipeline)
 - Images ([desk](https://openclipart.org/detail/216179/messy-desk), [Sisyphus](https://openclipart.org/detail/275842/sisyphus-overcoming-silhouette)) taken from from [openclipart.org](https://openclipart.org) under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/), [unlimited commercial use](https://openclipart.org/unlimited-commercial-use-clipart).
 - The embedded parallel computing animations were created using [PowToon](https://www.powtoon.com) and are used only as explicitly permitted in the [Terms and Conditions of Use](https://www.powtoon.com/terms-and-conditions/). The maintainers of and contributors to `drake` make no copyright claim to any of the constituent graphicical elements that comprise the animations.
