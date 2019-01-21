@@ -1,6 +1,5 @@
 ---
-title: "The drake R package"
-subtitle: "Reproducible computation at scale"
+title: "Reproducible computation at scale in R"
 author: Will Landau
 output: 
   revealjs::revealjs_presentation:
@@ -24,7 +23,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 options(warnPartialMatchArgs = FALSE)
 ```
 
-## Why drake?
+## Goals
 
 <br>
 <img src = "./images/infographic.svg" style="border: none; box-shadow: none;">
@@ -62,14 +61,14 @@ options(warnPartialMatchArgs = FALSE)
 
 <img src = "./images/pipelines.png" style="border: none; box-shadow: none; height: 400px">
 
-## Small example `drake` project: GDP
+## Small example analysis project: GDP
 
 - Which quantity is a better predictor of GDP per capita, life expectancy or population?
   - [Gapminder data](https://www.gapminder.org/data/): observations on multiple countries from 1952 to 2007.
   - Bayesian regeression with [`rstanarm`](https://github.com/stan-dev/rstanarm): straightforward inference and interpretation.
 - But Bayesian methods can be <span style = "color: red">**computationally expensive**</span>!
 
-## GDP analysis pipeline
+## Let's use the `drake` R package.
 
 <img src = "./images/graph1.png" style="border: none; box-shadow: none;">
 
