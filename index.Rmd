@@ -75,6 +75,7 @@ options(warnPartialMatchArgs = FALSE)
 ## The drake plan: steps of the workflow.
 
 ```{r show_plan, eval = FALSE}
+library(drake)
 plan <- drake_plan(
   life_exp = fit_model(covariate = "life_exp", dataset = dataset),
   log_pop = fit_model(covariate = "log_pop", dataset = dataset),
