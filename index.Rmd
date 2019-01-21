@@ -194,7 +194,7 @@ rm(plots)
 
 <br>
 
-- **Tangible evidence** that your results match the code and data at hand:
+- **Tangible evidence** that your results match the underlying code and data:
 
 ```{r make-done}
 make(plan)
@@ -202,9 +202,10 @@ make(plan)
 outdated(config)
 ```
 
-## Scale up to many targets
+## Scale up to many targets.
 
-- Predict gross state product using an econometrics dataset.
+- Larger example: [`Produc`](https://rdrr.io/rforge/Ecdat/man/Produc.html) dataset.
+- Predict gross state product using all possible 3-covariate models.
 
 ```{r largeplan}
 library(Ecdat)
@@ -221,7 +222,7 @@ x2 <- rlang::syms(combos[2, ])
 x3 <- rlang::syms(combos[3, ])
 ```
 
-## Scale up to many targets
+## Scale up to many targets.
 
 - Experimental interface coming to `drake` >= 7.0.0.
 
