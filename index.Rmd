@@ -16,6 +16,7 @@ output:
 ```{r, include = FALSE}
 unlink(".RData")
 suppressMessages(suppressWarnings(library(drake)))
+suppressMessages(suppressWarnings(library(Ecdat)))
 suppressMessages(suppressWarnings(library(tidyverse)))
 pkgconfig::set_config("drake::strings_in_dots" = "literals")
 clean(destroy = TRUE, verbose = FALSE)
@@ -240,7 +241,7 @@ plan <- drake_plan(
   ),
   rmspe = target(
     do.call(rbind, rmspe_i),
-    transform = reduce()
+    transform = combine()
   ),
   plot = ggsave(file_out("rmspe.pdf"), plot_rmspe(rmspe))
 )
